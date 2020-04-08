@@ -1,6 +1,15 @@
 module Wicked::Controller::Concerns::RenderRedirect
   extend ActiveSupport::Concern
 
+  def render_wizard_view(view)
+    if @skip_to
+      url_params = (@wicked_redirect_params || {}).merge(params)
+      redirect_to wizard_path(@skip_to, url_params), options
+    else
+      render_step(view)
+    end
+  end
+
   def render_wizard(resource = nil, options = {}, params = {})
     process_resource!(resource, options)
 
